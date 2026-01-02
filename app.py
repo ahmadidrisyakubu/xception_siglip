@@ -155,6 +155,9 @@ def predict_image(path):
     final_label1 = 'real' if prediction1 > 0.5 else 'fake'
     conf1 = float(prediction1 if prediction1 > 0.5 else 1 - prediction1)
     
+    # Deduct 0.0010 from Keras model confidence as requested
+    conf1 = max(0, conf1 - 0.0010)
+    
     # --- Model 2 Inference (SigLIP) ---
     img2 = Image.open(path).convert("RGB")
     inputs2 = processor2(images=img2, return_tensors="pt").to(device)
