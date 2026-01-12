@@ -82,7 +82,7 @@ except Exception as e:
 # ===============================
 # Constants
 # ===============================
-ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg"}
+ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "webp", "bmp", "tif", "tiff"}
 MAX_FILE_SIZE = 30 * 1024 * 1024
 
 os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
