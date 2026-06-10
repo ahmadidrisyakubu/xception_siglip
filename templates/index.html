@@ -7,7 +7,8 @@
     <title>Deepfake Detection Tool | Apex Broadcasting Network</title>
     <link rel="icon" type="image/png" href="/static/Logo.jpg">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <body style="zoom: 0.75; -moz-transform: scale(0.75); -moz-transform-origin: 0 0;">
+    <link href="/static/production.css" rel="stylesheet">
+	<body style="zoom: 0.75; -moz-transform: scale(0.75); -moz-transform-origin: 0 0;">
     <body>
     <style>
         * {
@@ -737,6 +738,14 @@
                 <i class="fas fa-graduation-cap"></i>
                 <span>Deepfake Literacy</span>
             </button>
+            <button class="tab-button" onclick="switchTab(event, 'dashboard')">
+                <i class="fas fa-chart-bar"></i>
+                <span>Dashboard</span>
+            </button>
+            <button class="tab-button" onclick="switchTab(event, 'history')">
+                <i class="fas fa-history"></i>
+                <span>History</span>
+            </button>
         </nav>
 
         <!-- Detection Tab -->
@@ -752,7 +761,7 @@
                     <i class="fas fa-exclamation-triangle"></i>
                     <span>
                         For best accuracy, upload the original image.
-                        Avoid screenshots, cropped images, or compressed images, as they may reduce detection reliability.
+                        Avoid screenshots, social media downloads, or compressed files, as they may reduce detection reliability.
                     </span>
                 </div>
                 
@@ -764,12 +773,12 @@
                         <p class="upload-text">
                             <strong>Click to browse</strong> or drag and drop your image here
                         </p>
-                        <input type="file"
-                               id="imageInput"
-                               name="image"
-                               accept="image/jpeg,image/png,image/webp,image/bmp,image/tiff"
-                               required
-                               style="display:none;">
+	                        <input type="file"
+	                               id="imageInput"
+	                               name="image"
+	                               accept="image/jpeg,image/png,image/webp"
+	                               required
+	                               style="display:none;">
 
                     </div>
                     
@@ -816,11 +825,14 @@
                                 <i class="fas fa-info-circle"></i>
                                 <p id="interpretationText">The image appears to be authentic based on our analysis.</p>
                             </div>
+                            <a id="latestReportLink" class="report-btn" href="#" style="display: none;"><i class="fas fa-file-pdf"></i> Download PDF Report</a>
                         </div>
                     </div>
                 </div>
             </section>
         </div>
+
+        {% include "production_sections.html" %}
 
         <!-- Literacy Tab -->
         <div id="literacy-tab" class="tab-content">
@@ -1041,6 +1053,8 @@
 
             document.getElementById(tabName + '-tab').classList.add('active');
             event.currentTarget.classList.add('active');
+            if (tabName === 'dashboard') loadDashboard();
+            if (tabName === 'history') loadHistory(1);
         }
 
         const fileUploadArea = document.getElementById('fileUploadArea');
@@ -1094,6 +1108,13 @@
                     data.confidence,
                     imageInput.files[0]
                 );
+                const reportLink = document.getElementById('latestReportLink');
+                if (data.record_id) {
+                    reportLink.href = `/reports/${data.record_id}.pdf`;
+                    reportLink.style.display = 'inline-flex';
+                } else {
+                    reportLink.style.display = 'none';
+                }
 
             } catch (error) {
                 alert(error.message);
@@ -1143,6 +1164,7 @@
             resultsSection.scrollIntoView({ behavior: 'smooth' });
         }
 </script>
+<script src="/static/production.js"></script>
 
 </body>
 </html>
